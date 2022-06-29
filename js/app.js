@@ -44,11 +44,30 @@ function leerDatosCurso(curso){
         id: curso.querySelector('a').getAttribute('data-id'),
         cantidad:1
     }
-
-    //Agreaga elementos al arreglo de carrito
-    //Se toma una copia del carrito ya que va a estar vacio y se van agregando articulos
-    //se copia arreglo anterior para no ir perdiendo articulos
-    articulosCarrito = [...articulosCarrito, infoCurso];
+    //Antes de agregar un elemento al carrito se valida si ya existe y de ser así se aumenta la cantidad
+    //.some permite iterar sobre un arreglo de objetos y verificar si un objeto existe en el
+    //se itera sobre cada curso si es igual al objeto que se esta creando
+    const existe = articulosCarrito.some(curso => curso.id === infoCurso.id);
+    if(existe){
+        //Actualizar la cantidad
+        //.map crea un nuevo arreglo
+        const cursos = articulosCarrito.map(curso => {
+            //cuando el curso actual del carrito es igual al que tratamos de agregar
+            if(curso.id === infoCurso.id){
+                curso.cantidad++;
+                return curso; //retorna el objeto actualizado
+            }else{
+                return curso; //retorna objetos que no son duplicados
+            }
+        });
+        //express operator copia arreglo anterior para no ir perdiendo articulos
+        articulosCarrito = [...cursos];
+    }else{
+        //Agregar nuevo articulo
+        //Se toma una copia del carrito ya que va a estar vacio y se van agregando articulos
+        //se copia arreglo anterior para no ir perdiendo articulos
+        articulosCarrito = [...articulosCarrito, infoCurso];
+    }
 
     console.log(articulosCarrito);
     //Se llama la función después de leer los datos del curso
@@ -63,10 +82,17 @@ function carritoHTML(){
 
     //se itera cada curso, recorre el carrito y genera el HTML
     articulosCarrito.forEach(curso=>{
+        const {imagen, titulo, precio, cantidad, id} = curso;
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                ${curso.titulo}
+                <img src="${imagen}" width="100">
+            </td>
+            <td>${titulo}</td>
+            <td>${precio}</td>
+            <td>${cantidad}</td>
+            <td>
+                <a href="#" class="borrar-curso" data-id="${id}"> X </a>
             </td>
         `;
 
