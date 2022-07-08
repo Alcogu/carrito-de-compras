@@ -13,6 +13,17 @@ cargarEventListeners();
 function cargarEventListeners(){
     //Cuando agregas un curso presionando "Agregar al carrito"
     listarCursos.addEventListener('click', agregarCurso);
+
+    //Elimina cursos del carrito
+    carrito.addEventListener('click', eliminarCurso);
+
+    //Vaiar carrito
+    vaciarCarritoBtn.addEventListener('click',() =>{
+        articulosCarrito = [];//Resetea o vacia el arreglo
+
+        //se elimina todo el HTML
+        limpiarHTML();
+    } );
 }
 
 // ---------------------------- Funciones ----------------------------
@@ -27,6 +38,23 @@ function agregarCurso(e){
         const cursoSeleccionado = e.target.parentElement.parentElement;
         leerDatosCurso(cursoSeleccionado);
     } 
+}
+
+//Eliminar curso del carrito
+function eliminarCurso(e){
+    //e es el evento para identificar a que se le da click
+    //console.log(e.target.classList);
+
+    //Si se da click en la clase borrar-curso
+    if(e.target.classList.contains('borrar-curso')){   
+        const cursoId = e.target.getAttribute('data-id');     
+        //Eliminar del arreglo de articulosCarrito por el data-id
+        //se itera sobre cada curso y se obtiene su id
+        //para sacar el elemento del arreglo se saca todo menos el que se elimina
+        articulosCarrito = articulosCarrito.filter(curso => curso.id !== cursoId);
+
+        carritoHTML();//Iterar sobre el carrito y mostrar su HTML
+    }
 }
 
 //Lee el contenido del HTML al que se le da click y extrae la información
