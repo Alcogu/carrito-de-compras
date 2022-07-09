@@ -100,6 +100,7 @@ function leerDatosCurso(curso){
     console.log(articulosCarrito);
     //Se llama la función después de leer los datos del curso
     carritoHTML();
+
 }
 
 //Muestra el carrito de compras en el HTML
